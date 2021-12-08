@@ -1,0 +1,63 @@
+version: "3.7"
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    image: basic-login-api
+    container_name: basic-login-api
+    command: /usr/src/app/node_modules/.bin/nodemon server.js
+    volumes:
+      - ./api/:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    env_file: ./api/.env
+    environment:
+      NODE_ENV: development
+      DB_USER: app
+      DB_HOST: db
+      DB_PORT: 27017
+      DB_NAME: mydb
+      DB_PASS: secret
+    networks:
+      - basic-login-network
+  db:
+    image: mongo
+    volumes:
+      - data-volume:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - basic-login-network
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    image: basic-login-client
+    stdin_open: true
+    container_name: basic-login-client
+    command: yarn start
+    volumes:
+      - ./client/:/usr/app
+      - /usr/app/node_modules
+    depends_on:
+      - api
+    ports:
+      - "3000:3000"
+    networks:
+      - basic-login-network
+    environment:
+      REACT_APP_API: http://localhost:8080/
+
+networks:
+  basic-login-network:
+    driver: bridge
+
+volumes:
+  data-volume: null
+  node_modules: null
+  web-root:
+    driver: local
