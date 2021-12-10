@@ -63,6 +63,7 @@ userController.profile = async (req, res) => {
 
 userController.forgotPassword = async (req, res) => {
     const { email } = req.body;
+    const emailHost = process.env.APP_HOST || "localhost";
     let user = await User.findOne({ email });
     if (user === null) {
         res.status(404).json({
@@ -100,7 +101,7 @@ userController.forgotPassword = async (req, res) => {
         text:
             'You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n'
             + 'Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:\n\n'
-            + `http://localhost:3000/reset/${token}\n\n`
+            + `http://${emailHost}:3000/reset/${token}\n\n`
             + 'If you did not request this, please ignore this email and your password will remain unchanged.\n',
     };
 

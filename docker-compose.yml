@@ -22,6 +22,7 @@ services:
       DB_PORT: 27017
       DB_NAME: mydb
       DB_PASS: secret
+      APP_HOST: localhost
     networks:
       - basic-login-network
   db:
