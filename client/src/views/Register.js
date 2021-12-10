@@ -18,11 +18,31 @@ export default function SignUp(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+    const name = data.get('name');
+    const password = data.get('password');
+    const confirmPassword = data.get('confPassword');
+
+    if (! /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      alert("Email is not valid.");
+      return
+    }
+
+    if (password !== confirmPassword) {
+      alert("Passwords have to match");
+      return
+    }
+
+    if (password.length < 8) {
+      alert("The password has to be greater than 8 chars");
+      return
+    }
+
     const req = {
-      email: data.get('email'),
-      name: data.get('name'),
-      password: data.get('password'),
-      confirmPassword: data.get('confPassword')
+      email: email,
+      name: name,
+      password: password,
+      confirmPassword: confirmPassword
     };
 
     registerUser(req).then((res) => {

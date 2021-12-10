@@ -18,8 +18,14 @@ export default function ForgotPassword(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+
+    if (! /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      alert("Email is not valid.");
+      return
+    }
     const req = {
-      email: data.get('email')
+      email: email
     };
 
     forgotPassword(req).then((res) => {

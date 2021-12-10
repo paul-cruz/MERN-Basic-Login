@@ -18,9 +18,22 @@ export default function SignIn(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    const email = data.get('email');
+    const password = data.get('password');
+
+    if (! /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
+      alert("Email is not valid.");
+      return
+    }
+
+    if (password.length < 8) {
+      alert("The password has to be greater than 8 chars");
+      return
+    }
+
     const req = {
-      email: data.get('email'),
-      password: data.get('password')
+      email: email,
+      password: password
     };
 
     loginUser(req).then((res) => {
