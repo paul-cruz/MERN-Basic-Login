@@ -146,7 +146,7 @@ userController.resetPassword = async (req, res) => {
     const updatedUser = { password: passwordHash, resetPasswordToken: null };
 
 
-    let rsp = await User.findOneAndUpdate(email, updatedUser, {
+    let rsp = await User.findOneAndUpdate({ email }, updatedUser, {
         new: true
     });
 
